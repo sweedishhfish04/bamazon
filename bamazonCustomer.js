@@ -6,6 +6,7 @@ var connection = mysql.createConnection({
     password: '123',
     database: 'bamazon'
 });
+var data = null;
 
 connection.connect()
 
@@ -13,16 +14,17 @@ connection.query('SELECT * FROM products', function (err, results, fields) {
     results.forEach(item => {
         console.log(`id: ${item.item_id}\tProduct: ${item.product_name}\tPrice: $${item.price}`)
     })
+    data = results;
     prompt.start();
 
     prompt.get(['id', 'units'], function (err, result) {
-        var item = results.find(item => item.id === id)
-        if (units <= item.stock_quantity) {
-            connection.query(`UPDATE products SET stock_quantity ${item.stock_quantity - units} WHERE item_id = ${item.item_id}`, function (error, results, fields) {
+        var item = results.find(item => { return item.item_id === result.id })
+        if (result.units <= item.stock_quantity) {
+            connection.query(`UPDATE products SET stock_quantity ${item.stock_quantity - result.units} WHERE item_id = ${item.item_id}`, function (error, results, fields) {
                 if (err) {
                     console.error('Error making order')
                 } else {
-                    console.log(`Total Cost: ${units * item.price}`)
+                    console.log(`Total Cost: ${result.units * item.price}`)
                 }
             })
         } else {
