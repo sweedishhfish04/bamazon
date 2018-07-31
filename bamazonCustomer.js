@@ -29,7 +29,8 @@ connection.query('SELECT * FROM products', function (err, results, fields) {
                 if (err) {
                     console.error('Error making order')
                 } else {
-                    console.log(`Total Cost: ${parseInt(result.units) * item.price}`)
+                    console.log(item.stock_quantity-parseInt.units)
+                    console.log(`Total Cost: ${parseInt(result.units) * parseInt(item.price.replace(',', ''))}`)
                 }
             })
         } else {
