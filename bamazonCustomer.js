@@ -18,7 +18,8 @@ connection.query('SELECT * FROM products', function (err, results, fields) {
     prompt.start();
 
     prompt.get(['id', 'units'], function (err, result) {
-        var item = results.find(item => { return item.item_id === result.id })
+      //  console.log(data,results)
+        var item = data.find(item => { return item.item_id === result.id })
         if (result.units <= item.stock_quantity) {
             connection.query(`UPDATE products SET stock_quantity ${item.stock_quantity - result.units} WHERE item_id = ${item.item_id}`, function (error, results, fields) {
                 if (err) {
