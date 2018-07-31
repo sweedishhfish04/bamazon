@@ -20,17 +20,19 @@ connection.query('SELECT * FROM products', function (err, results, fields) {
     prompt.get(['id', 'units'], function (err, result) {
         //  console.log(data,results)
         var item = data.find(itm => {
-         //   console.log(itm.item_id, result.id)
+            //   console.log(itm.item_id, result.id)
             return itm.item_id === parseInt(result.id)
         })
         console.log(item);
         if (parseInt(result.units) <= item.stock_quantity) {
-            connection.query(`UPDATE products SET stock_quantity ${item.stock_quantity - parseInt(result.units)} WHERE item_id = ${item.item_id}`, function (error, results, fields) {
+            var query = `UPDATE products SET stock_quantity = ${item.stock_quantity - parseInt(result.units)} WHERE item_id = ${item.item_id}`
+            console.log(query)
+            connection.query(query, function (error, results, fields) {
                 if (err) {
                     console.error('Error making order')
                 } else {
-                    console.log(item.stock_quantity-parseInt.units)
-                    console.log(`Total Cost: ${parseInt(result.units) * parseInt(item.price.replace(',', ''))}`)
+                    console.log(item.stock_quantity - parseInt(result.units))
+                    console.log(`Total Cost: $${parseInt(result.units) * parseInt(item.price.replace(',', ''))}`)
                 }
             })
         } else {
